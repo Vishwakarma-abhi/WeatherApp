@@ -2,6 +2,11 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:weather_app/const.dart';
+import 'package:timezone/timezone.dart' as tz;
+import 'package:timezone/data/latest.dart' as tzdata;
+
+import 'package:provider/provider.dart';
+import 'package:weather_app/provider/location_provider.dart';
 
 class WeatherProvider with ChangeNotifier {
   Map<String, dynamic> _weatherData = {};
@@ -37,6 +42,10 @@ class WeatherProvider with ChangeNotifier {
     final String weatherIcon = data['weather'][0]['icon'];
     final double windSpeed = data['wind']['speed'];
     final double humidity = data['main']['humidity'].toDouble();
+    final int sunriseTimestamp = data['sys']['sunrise'];
+    final int sunsetTimestamp = data['sys']['sunset'];
+
+    print(sunriseTimestamp);
 
     return {
       'cityName': cityName,
@@ -45,6 +54,8 @@ class WeatherProvider with ChangeNotifier {
       'icon': weatherIcon,
       'windSpeed': windSpeed,
       'humidity': humidity,
+      'sunrise': sunriseTimestamp,
+      'sunset': sunsetTimestamp,
     };
   }
 

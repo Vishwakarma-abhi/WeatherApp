@@ -13,6 +13,12 @@ dependencies:
     sdk: flutter
   provider: ^6.1.1
   geolocator: ^10.1.0
+  geocoding: ^2.1.1
+  intl: ^0.19.0
+  timezone:
+
+  fluttertoast:
+
   weather_icons: ^3.0.0
   http: ^1.1.2
 
@@ -30,6 +36,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/home.jpg
+    - assets/invalidInput.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

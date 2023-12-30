@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:weather_app/provider/location_provider.dart';
 import 'package:weather_app/provider/weather_provider.dart';
 import 'package:weather_icons/weather_icons.dart';
+import 'package:intl/intl.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -12,6 +14,21 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController _cityController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _initLocation();
+  }
+
+  Future<void> _initLocation() async {
+    final locationProvider =
+        Provider.of<LocationProvider>(context, listen: false);
+    await locationProvider.getLocation();
+    _cityController.text = locationProvider.currentAddress;
+    print(_cityController);
+    _fetchWeatherData(context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -153,6 +170,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                     )
                                   ],
                                 ),
+                                Text(
+                                  'Sunrise: ${getFormattedTime(weatherData['sunrise'])}',
+                                  style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                    'Sunset: ${getFormattedTime(weatherData['sunset'])}',
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold)),
                               ],
                             ),
                           ),
@@ -251,6 +279,14 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
+  }
+
+  String getFormattedTime(int timestamp) {
+    DateTime dateTime =
+        DateTime.fromMillisecondsSinceEpoch(timestamp * 1000, isUtc: true);
+    String formattedTime =
+        DateFormat.Hm().format(dateTime.toLocal()); // Format as HH:mm
+    return formattedTime;
   }
 
   void _fetchWeatherData(BuildContext context) {
